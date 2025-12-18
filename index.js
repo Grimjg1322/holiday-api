@@ -6,10 +6,12 @@ const app = express();
 app.use(cors());
 
 
-const connectionString = 'postgresql://postgres:W130406007008w_@2a05:d014:1c96:5f19:8c72:479d:9b73:2e9:5432/postgres';
-
 const pool = new Pool({
-  connectionString: connectionString,
+  host: '2a05:d014:1c96:5f19:8c72:479d:9b73:2e9',
+  port: 5432,
+  database: 'postgres',
+  user: 'postgres',
+  password: 'W130406007008w_',
   ssl: {
     rejectUnauthorized: false
   }
@@ -18,7 +20,7 @@ const pool = new Pool({
 // Проверка подключения
 pool.connect((err, client, release) => {
   if (err) {
-    console.error('Ошибка подключения к БД:', err);
+    console.error('❌ Ошибка подключения к БД:', err.message);
   } else {
     console.log('✅ Подключено к базе данных!');
     release();
@@ -46,7 +48,7 @@ app.get('/api.php', async (req, res) => {
     }
   } catch (error) {
     console.error('Ошибка:', error);
-    res.status(500).json({ holiday: "Ошибка сервера" });
+    res.status(500).json({ holiday: "Ошибка сервера: " + error.message });
   }
 });
 
